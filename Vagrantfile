@@ -65,6 +65,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.run_list = [
       "recipe[iptables::default]",
       "recipe[vim::default]",
+      "recipe[git::default]",
       "recipe[rbenv::default]",
       "recipe[rbenv::ruby_build]",
       "recipe[rbenv-install-rubies]",
