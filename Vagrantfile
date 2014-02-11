@@ -89,7 +89,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "other_versions" => [],
         "gems" => [
             "ruby-mysql",
-            "mysql",
             "bundler",
             "pry",
             "rbenv-rehash",
