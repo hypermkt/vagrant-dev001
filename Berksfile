@@ -1,0 +1,3 @@
+:opscode
+
+cookbook 'mysql'

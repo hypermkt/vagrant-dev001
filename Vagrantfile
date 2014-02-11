@@ -6,6 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "CentOS-6.4-x86_64"
+  config.berkshelf.enabled = false
   config.omnibus.chef_version = :latest
 
   # The url from where the 'config.vm.box' box will be fetched if it
@@ -51,35 +52,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # View the documentation for the provider you're using for more
   # information on available options.
 
-  # Enable provisioning with Puppet stand alone.  Puppet manifests
-  # are contained in a directory path relative to this Vagrantfile.
-  # You will need to create the manifests directory and a manifest in
-  # the file base.pp in the manifests_path directory.
-  #
-  # An example Puppet manifest to provision the message of the day:
-  #
-  # # group { "puppet":
-  # #   ensure => "present",
-  # # }
-  # #
-  # # File { owner => 0, group => 0, mode => 0644 }
-  # #
-  # # file { '/etc/motd':
-  # #   content => "Welcome to your Vagrant-built virtual machine!
-  # #               Managed by Puppet.\n"
-  # # }
-  #
-  # config.vm.provision :puppet do |puppet|
-  #   puppet.manifests_path = "manifests"
-  #   puppet.manifest_file  = "site.pp"
-  # end
-
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
   # path, and data_bags path (all relative to this Vagrantfile), and adding
   # some recipes and/or roles.
   #
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "./cookbooks"
+    chef.cookbooks_path = ["cookbooks", "site-cookbooks"]
     #chef.roles_path = "../my-recipes/roles"
     #chef.data_bags_path = "../my-recipes/data_bags"
     #chef.add_recipe "mysql"
@@ -87,10 +65,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.run_list = [
       "recipe[iptables::default]",
       "recipe[php::default]",
+      "recipe[mysql::server]",
+      "recipe[mysql::client]",
       "recipe[apache::default]"
     ]    
     # You may also specify custom JSON attributes:
-    #chef.json = { :mysql_password => "foo" }
+    chef.json = { 
+      :mysql => {
+        :server_root_password => "vagrant",
+        :server_repl_password => "vagrant",
+        :server_debian_password => "vagrant"
+      },
+      "rbenv" => {
+        "group_users" => ["vagrant"]
+      },
+      "rbenv_install_rubies" => {
+        "global_version" => "1.9.3-p484",
+        "other_versions" => [],
+        "gems" => [
+            "ruby-mysql",
+            "mysql",
+            "bundler",
+            "pry",
+            "rbenv-rehash",
+            {"nokogiri" => {"version" => "1.5.10"}}
+          ],
+        "lib_packages" => ["libxml2-devel", "libxslt-devel"]
+      }
+    }
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,
