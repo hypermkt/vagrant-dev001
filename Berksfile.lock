@@ -3,11 +3,49 @@
     "mysql": {
       "locked_version": "4.0.20"
     },
+    "vim": {
+      "locked_version": "1.1.2"
+    },
+    "rbenv": {
+      "locked_version": "1.7.1"
+    },
+    "rbenv-install-rubies": {
+      "locked_version": "0.2.1",
+      "git": "https://github.com/akahigeg/rbenv-install-rubies-cookbook.git",
+      "ref": "9940bd7e068340c10d5ba0c369c1747f3345d2e3"
+    },
     "openssl": {
       "locked_version": "1.1.0"
     },
     "build-essential": {
       "locked_version": "1.4.2"
+    },
+    "git": {
+      "locked_version": "2.9.0"
+    },
+    "dmg": {
+      "locked_version": "2.1.4"
+    },
+    "windows": {
+      "locked_version": "1.12.8"
+    },
+    "chef_handler": {
+      "locked_version": "1.1.4"
+    },
+    "runit": {
+      "locked_version": "1.5.8"
+    },
+    "yum": {
+      "locked_version": "3.0.6"
+    },
+    "yum-epel": {
+      "locked_version": "0.2.0"
+    },
+    "apt": {
+      "locked_version": "2.3.6"
+    },
+    "ohai": {
+      "locked_version": "1.1.12"
     }
   }
 }

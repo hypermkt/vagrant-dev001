@@ -64,6 +64,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #chef.add_role "web"
     chef.run_list = [
       "recipe[iptables::default]",
+      "recipe[vim::default]",
+      "recipe[rbenv::default]",
+      "recipe[rbenv::ruby_build]",
+      "recipe[rbenv-install-rubies]",
       "recipe[php::default]",
       "recipe[mysql::server]",
       "recipe[mysql::client]",
