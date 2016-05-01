@@ -1,0 +1,12 @@
+---
+ruby_version: 2.3.0
+ruby_required_packages:
+  - readline-devel
+  - zlib-devel
+  - openssl-devel
+  - gcc
+  - mysql-devel
+  - git
+
+ruby_gems:
+  - bundler

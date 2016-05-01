@@ -1,0 +1,65 @@
+# rbenv/ruby-buildを利用してRuby、gemライブラリをインストールする
+---
+- name: 関連パッケージをインストール
+  become: yes
+  yum: name={{item}} state=latest
+  with_items:
+    - "{{ ruby_required_packages }}"
+
+- name: rbenvの取得
+  become: yes
+  git:
+    repo: https://github.com/rbenv/rbenv.git
+    dest: /usr/local/rbenv
+
+- name: ruby-buildの取得
+  become: yes
+  git:
+    repo: https://github.com/rbenv/ruby-build.git
+    dest: /usr/local/rbenv/plugins/ruby-build
+
+- name: rbenv環境設定ファイルを配備
+  become: yes
+  copy:
+    src: rbenv.sh
+    dest: /etc/profile.d/rbenv.sh
+    owner: root
+    group: root
+    mode: 0644
+
+- name: rbenvでインストールされているRubyのバージョンを確認
+  become: yes
+  shell: bash -lc "rbenv versions | grep {{ ruby_version }}"
+  changed_when: false
+  always_run: yes
+  register: is_ruby_installed
+  ignore_errors: yes
+
+- name: Rubyをインストール
+  become: yes
+  shell: bash -lc "rbenv install {{ ruby_version }}"
+  when: is_ruby_installed.rc != 0
+
+- name: 現在利用しているRubyバージョンを確認
+  become: yes
+  shell: bash -lc "rbenv version | grep {{ ruby_version }}"
+  changed_when: false
+  always_run: yes
+  register: is_ruby_version_used
+  ignore_errors: yes
+
+- name: 利用Rubyバージョンを設定
+  become: yes
+  shell: bash -lc "rbenv global {{ ruby_version }}"
+  when: is_ruby_version_used.rc != 0
+
+- name: gemライブラリをインストール
+  become: yes
+  gem:
+    name: "{{ item }}"
+    executable: /usr/local/rbenv/shims/gem
+    state: present
+    user_install: no
+  ignore_errors: yes
+  with_items:
+    - "{{ ruby_gems }}"

@@ -1,0 +1,5 @@
+---
+- hosts: develop_servers
+  become: yes
+  roles:
+    - { role: ruby, ruby_version: 1.9.3-p484 }
